@@ -14,6 +14,7 @@ function App() {
   const sendMessage = () => {
     let u = document.getElementById("message").value;
     setText(u);
+    document.getElementById("message").value = "";
   };
 
   return (
