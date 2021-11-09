@@ -1,13 +1,10 @@
 import React from "react";
 import "./Message.css"
 
-export const Message = ({ message, onMessageClick }) => {
-    // const message = props.message;
-    // const { message } = props;
-
-    return (
-        <h3 className="message" onClick={onMessageClick}>
-            {message}
-        </h3>
-    );
-};
+export const Message = ({ message, bot }) => {
+    return <div>
+        {message.map((mes) => (
+            <div>{mes.author}: {mes.text}</div>
+        ))}
+    </div>
+}
