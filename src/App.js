@@ -24,8 +24,11 @@ function App() {
       }
     );
     input.current.value = "";
-    input.current.focus();
   };
+
+  useEffect(() => {
+    input.current.focus();
+  }, [messageList]);
 
   const sendMessage = newMessage => {
     setMessages([...messageList, newMessage]);
