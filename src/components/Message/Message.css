@@ -1,4 +1,11 @@
-.message {
-    color: cornflowerblue;
-    margin-bottom: 15px;
+.messages {
+    align-items: center;
+}
+
+.message-people {
+    margin: auto, 0;
+}
+
+.message-bot {
+    margin: 0, auto;
 }
