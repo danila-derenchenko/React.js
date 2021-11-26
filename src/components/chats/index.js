@@ -136,7 +136,7 @@ export function Chats() {
                 </div>
                 <div className="chat">
                     <div className="chatName">{name}</div>
-                    <Message message={messageList[chatId]} chat_id={chatId} className="content" />
+                    <Message message={messageList[chatId]} className="content" />
                 </div>
             </div>
             <div className="managing">
