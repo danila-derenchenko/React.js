@@ -9,7 +9,8 @@ export const ManagingChats = ({ addChat, deleteChat }) => {
         addChat({
             chat_name: input.current.value,
             id: 0
-        })
+        });
+        input.current.value = "";
     };
     const ButtonDeleteChat = () => {
         deleteChat();

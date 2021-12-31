@@ -1,8 +1,8 @@
-import { PROFILE_CHECKBOX } from "./action";
+import { PROFILE_CHECKBOX } from "../action";
 
 const initialState = {
     checkbox: false,
-    name: "Нажми на меня"
+    name: "Нажми на меня",
 }
 
 export const profileReduser = (state = initialState, action) => {

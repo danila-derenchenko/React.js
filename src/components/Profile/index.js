@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { profile_checkbox } from "../../store/profile/action";
+import { profile_checkbox } from "../../store/action";
 
 export const Profile = () => {
-    const name = useSelector(state => state.name);
-    const checkboxValue = useSelector(state => state.checkbox);
+    const name = useSelector(state => state.profile.name);
+    const checkboxValue = useSelector(state => state.profile.checkbox);
     const dispatch = useDispatch();
     const setState = () => {
         dispatch(profile_checkbox);
