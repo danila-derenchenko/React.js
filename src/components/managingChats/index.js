@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import "./managingChats.css";
 
-export const ManagingChats = ({ addChat, deleteChat }) => {
+export const ManagingChats = ({ addChat }) => {
     const form = useRef();
     const input = useRef();
     const createChat = (event) => {
@@ -12,14 +12,10 @@ export const ManagingChats = ({ addChat, deleteChat }) => {
         });
         input.current.value = "";
     };
-    const ButtonDeleteChat = () => {
-        deleteChat();
-    }
     const click = () => {
         form.current.classList.toggle("form")
     }
     return <div className="managing">
-        <button className="button" onClick={ButtonDeleteChat}>Удалить активный чат</button>
         <button className="button" onClick={click} type="click">Добавить чат</button>
         <form className="form" ref={form} onSubmit={createChat}>
             <input ref={input} placeholder="Введите название чата" />

@@ -8,6 +8,8 @@ import { Navigate, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { chats_name } from "../../store/action.js";
 import { chats_add } from "../../store/action.js";
+import { chats_delete } from "../../store/action.js";
+import { send_message } from "../../store/action.js";
 
 const initialMessages = {
     1: [
@@ -39,10 +41,10 @@ const initialMessages = {
 export function Chats() {
     const [id, setId] = useState(14);
     const { chatId } = useParams();
-    const listChats = useSelector(state => state.chats);
+    const listChats = useSelector(state => state.chats.chats);
     const input = useRef();
     const [name, setName] = useState();
-    const [messageList, setMessages] = useState(initialMessages);
+    const messageList = useSelector(state => state.chats.messages);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const AUTHOR = {
@@ -79,37 +81,18 @@ export function Chats() {
         chat.id = id;
         setId(id + 1);
         console.log(id);
-        /*setMessages((prevMessages) => ({
-            ...prevMessages, [chat.id]: [{
-                text: "Привет, рад видеть тебя в чате",
-                author: "Бот",
-                id: Math.random(),
-                color: ""
-            }]
-        }));
-        setListChats((prevChats) => ([...prevChats, chat]));
-        console.log(chat); */
-        setMessages((prevMessages) => ({
-            ...prevMessages, [chat.id]: [{
-                text: "Привет, рад видеть тебя в чате",
-                author: "Бот",
-                id: Math.random(),
-                color: ""
-            }]
-        }));
         dispatch(chats_add(chat))
     };
 
-    const deleteChat = () => { // переделать под Redux
-        for (let i = 0; i < listChats.length; i++) {
-            if (chatId == listChats[i].id) {
-                let a = listChats;
-                a.splice(i, 1);
-                // setListChats(() => (a));
-                navigate("/chats");
-            }
+    const deleteChat = (event) => {
+        dispatch(chats_delete(event.target.attributes.chat.value))
+        if (chatId == event.target.attributes.chat.value) {
+            navigate("/chats");
         }
-    };
+        else {
+            navigate(`/chats/${chatId}`);
+        }
+    }
 
     const sendForm = event => {
         event.preventDefault();
@@ -125,10 +108,25 @@ export function Chats() {
     };
 
     const sendMessage = useCallback((newMessage) => {
-        setMessages((prevMessages) => ({ ...prevMessages, [chatId]: [...prevMessages[chatId], newMessage] }));
+        if (chatId === undefined) {
+            alert("Выберите чат для отправки сообщения");
+        }
+        else {
+            dispatch(send_message(newMessage, Number(chatId)));
+            navigate(`/chats/${chatId}`);
+            setTimeout(() => {
+                dispatch(send_message({
+                    text: "Привет, я робот",
+                    author: AUTHOR.bot,
+                    id: Math.random(),
+                    color: colorBot
+                }, Number(chatId)));
+                navigate(`/chats/${chatId}`);
+            }, 1500);
+        }
     }, [chatId])
 
-    useEffect(() => {
+    useEffect(() => { // перестал работать после переноса сообщений в Redux
         setTimeout(() => {
             if (messageList[chatId]?.length > 0) {
                 if (messageList[chatId][messageList[chatId]?.length - 1].author !== AUTHOR.bot) {
@@ -153,7 +151,7 @@ export function Chats() {
         <div className="App">
             <div className="content">
                 <div className="chatList">
-                    <ChatList renameChat={renameChat} />
+                    <ChatList renameChat={renameChat} deleteChat={deleteChat} />
                 </div>
                 <div className="chat">
                     <div className="chatName">{name}</div>
@@ -161,7 +159,7 @@ export function Chats() {
                 </div>
             </div>
             <div className="managing">
-                <ManagingChats addChat={addChat} deleteChat={deleteChat} />
+                <ManagingChats addChat={addChat} />
             </div>
             <div className="messages">
                 <div>Введите сообщение:</div>
