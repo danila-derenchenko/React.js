@@ -2,27 +2,37 @@ import React from "react";
 import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 import { Chats } from "./components/chats";
 import { Home } from "./components/home";
+import { Profile } from "./components/Profile"
+import { Provider } from "react-redux";
 import { ChatList } from "./components/chatList/ChatList";
+import { store } from "./store";
 
 export const App = () => {
-  return <BrowserRouter>
-    <ul>
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/chats">Chats</Link>
-      </li>
-    </ul>
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/chats">Chats</Link>
+          </li>
+          <li>
+            <Link to="/profile">Profile</Link>
+          </li>
+        </ul>
 
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/chats" element={<Chats />}>
-        <Route index element={<ChatList />} />
-        <Route path=":chatId" element={<Chats />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/chats" element={<Chats />}>
+            <Route index element={<ChatList />} />
+            <Route path=":chatId" element={<Chats />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>);
 };
 
 export default App;
