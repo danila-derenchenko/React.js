@@ -48,14 +48,7 @@ export const chatsReduser = (state = initualState, action) => {
             }
         case CHATS_ADD:
             state.chats.push({ chat_name: action.payload.name, id: action.payload.id });
-            state.messages[action.payload.id] = [
-                {
-                    text: "Приветствую тебя в чате!",
-                    author: "Бот",
-                    id: Math.random(),
-                    color: ""
-                },
-            ];
+            state.messages[action.payload.id] = [];
             console.log(state.messages);
             return state
         case CHATS_DELETE:

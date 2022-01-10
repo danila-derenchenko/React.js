@@ -10,6 +10,7 @@ import { chats_name } from "../../store/action.js";
 import { chats_add } from "../../store/action.js";
 import { chats_delete } from "../../store/action.js";
 import { send_message } from "../../store/action.js";
+import { stateChats, stateMessages } from "../../store/chats/selectors.js";
 
 const initialMessages = {
     1: [
@@ -41,10 +42,10 @@ const initialMessages = {
 export function Chats() {
     const [id, setId] = useState(14);
     const { chatId } = useParams();
-    const listChats = useSelector(state => state.chats.chats);
+    const listChats = useSelector(stateChats);
     const input = useRef();
     const [name, setName] = useState();
-    const messageList = useSelector(state => state.chats.messages);
+    const messageList = useSelector(stateMessages);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const AUTHOR = {
