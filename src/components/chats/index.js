@@ -6,38 +6,12 @@ import { ChatList } from "../chatList/ChatList.js";
 import { ManagingChats } from "../managingChats/index"
 import { Navigate, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { chats_name } from "../../store/action.js";
-import { chats_add } from "../../store/action.js";
-import { chats_delete } from "../../store/action.js";
-import { send_message } from "../../store/action.js";
+import { chats_name } from "../../store/chats/action.js";
+import { chats_add } from "../../store/chats/action.js";
+import { send_message } from "../../store/messages/action.js";
+import { chats_delete } from "../../store/chats/action.js";
+import { AUTHORS } from "../../utils/index.js";
 import { stateChats, stateMessages } from "../../store/chats/selectors.js";
-
-const initialMessages = {
-    1: [
-        {
-            text: "Привет, рад видеть тебя в чате",
-            author: "Бот",
-            id: Math.random(),
-            color: ""
-        }
-    ],
-    5: [
-        {
-            text: "Добро пожаловать во второй чат!",
-            author: "Бот",
-            id: Math.random(),
-            color: ""
-        }
-    ],
-    13: [
-        {
-            text: "Привет, ты в третьем чате!",
-            author: "Бот",
-            id: Math.random(),
-            color: ""
-        },
-    ],
-}
 
 export function Chats() {
     const [id, setId] = useState(14);
@@ -48,12 +22,8 @@ export function Chats() {
     const messageList = useSelector(stateMessages);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const AUTHOR = {
-        user: "Человек",
-        bot: "Бот"
-    };
-    const colorBot = "";
-    const colorPeople = "outlined";
+    const colorBot = AUTHORS.colorBot;
+    const colorPeople = AUTHORS.colorPeople;
 
     useEffect(() => { // перенести в Redux
         if (chatId != undefined) {
@@ -82,7 +52,13 @@ export function Chats() {
         chat.id = id;
         setId(id + 1);
         console.log(id);
-        dispatch(chats_add(chat))
+        dispatch(chats_add(chat));
+        dispatch(send_message({
+            text: "Привет",
+            author: AUTHORS.user,
+            id: Math.random(),
+            color: ""
+        }, chat.id))
     };
 
     const deleteChat = (event) => {
@@ -100,7 +76,7 @@ export function Chats() {
         sendMessage(
             {
                 text: input.current.value,
-                author: AUTHOR.user,
+                author: AUTHORS.user,
                 id: Math.random(),
                 color: colorPeople
             }
@@ -115,32 +91,8 @@ export function Chats() {
         else {
             dispatch(send_message(newMessage, Number(chatId)));
             navigate(`/chats/${chatId}`);
-            setTimeout(() => {
-                dispatch(send_message({
-                    text: "Привет, я робот",
-                    author: AUTHOR.bot,
-                    id: Math.random(),
-                    color: colorBot
-                }, Number(chatId)));
-                navigate(`/chats/${chatId}`);
-            }, 1500);
         }
     }, [chatId])
-
-    useEffect(() => { // перестал работать после переноса сообщений в Redux
-        setTimeout(() => {
-            if (messageList[chatId]?.length > 0) {
-                if (messageList[chatId][messageList[chatId]?.length - 1].author !== AUTHOR.bot) {
-                    sendMessage({
-                        text: "Привет, я робот",
-                        author: AUTHOR.bot,
-                        id: Math.random(),
-                        color: colorBot
-                    })
-                }
-            }
-        }, 1500);
-    }, [messageList]);
 
     if (chatId != undefined) {
         if (!messageList[chatId]) {

@@ -1,3 +1,3 @@
-export const stateChats = state => state.chats.chats;
+export const stateChats = state => state.chats;
 
-export const stateMessages = state => state.chats.messages;
+export const stateMessages = state => state.messages;
