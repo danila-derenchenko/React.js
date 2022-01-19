@@ -6,10 +6,8 @@ import { ChatList } from "../chatList/ChatList.js";
 import { ManagingChats } from "../managingChats/index"
 import { Navigate, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { chats_name } from "../../store/chats/action.js";
-import { chats_add } from "../../store/chats/action.js";
-import { send_message } from "../../store/messages/action.js";
-import { chats_delete } from "../../store/chats/action.js";
+import { chats_name, chats_add, chats_delete } from "../../store/chats/action.js";
+import { send_message, messageMiddlewar } from "../../store/messages/action.js";
 import { AUTHORS } from "../../utils/index.js";
 import { stateChats, stateMessages } from "../../store/chats/selectors.js";
 
@@ -22,7 +20,6 @@ export function Chats() {
     const messageList = useSelector(stateMessages);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const colorBot = AUTHORS.colorBot;
     const colorPeople = AUTHORS.colorPeople;
 
     useEffect(() => { // перенести в Redux
@@ -45,7 +42,6 @@ export function Chats() {
         dispatch(chats_name(newName, event.target.attributes.chat.value));
         alert("Название чата изменено на " + newName);
         setName(newName);
-        navigate(`/chats/${chatId}`);
     }
 
     const addChat = (chat) => {
@@ -65,9 +61,6 @@ export function Chats() {
         dispatch(chats_delete(event.target.attributes.chat.value))
         if (chatId == event.target.attributes.chat.value) {
             navigate("/chats");
-        }
-        else {
-            navigate(`/chats/${chatId}`);
         }
     }
 
@@ -89,8 +82,7 @@ export function Chats() {
             alert("Выберите чат для отправки сообщения");
         }
         else {
-            dispatch(send_message(newMessage, Number(chatId)));
-            navigate(`/chats/${chatId}`);
+            dispatch(messageMiddlewar(newMessage, Number(chatId)));
         }
     }, [chatId])
 

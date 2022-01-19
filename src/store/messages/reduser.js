@@ -6,13 +6,13 @@ export const messageReduser = (state = initualMessages, action) => {
     switch (action.type) {
         case SEND_MESSAGE:
             if (state[action.payload.chat] != undefined) {
-                state[action.payload.chat].push(action.payload.message);
+                const messages = state[action.payload.chat];
+                messages.push(action.payload.message);
+                return { ...state, [action.payload.chat]: messages }
             }
             else {
-                state[action.payload.chat] = []
-                state[action.payload.chat].push(action.payload.message);
+                return { ...state, [action.payload.chat]: [] }
             }
-            return state;
         default:
             return state;
     }
