@@ -1,17 +1,15 @@
 import React from "react";
 import "./ChatList.css"
-import { NavLink } from "react-router-dom";
+import ChatItem from "../chatItem";
+import { useSelector } from "react-redux";
+import { stateChats } from "../../store/chats/selectors";
 
-export const ChatList = ({ list }) => {
+export const ChatList = ({ renameChat, deleteChat }) => {
+    const list = useSelector(stateChats);
     return (<div>
         <ul className="list">
-            {list.map(chat => (
-                <li className="list_li" key={chat.id}zz>
-                    <NavLink className="nav" style={({ isActive }) => ({ color: isActive ? "black" : "blue", textDecoration: "none" })} to={`/chats/${chat.id}`} >
-                        {chat.chat_name}
-                    </NavLink>
-                </li>
-
+            {list.map((chat) => (
+                <ChatItem chat={chat} renameChat={renameChat} deleteChat={deleteChat} key={chat.id} />
             ))}
         </ul>
     </div>);
