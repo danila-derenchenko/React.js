@@ -1,4 +1,27 @@
-import { createStore } from "redux";
-import { rootReduser } from "./reduser";
+import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import { profileReduser } from "./profile/reduser";
+import { chatsReduser } from "./chats/reduser";
+import thunk from "redux-thunk";
+import { messageReduser } from "./messages/reduser";
+import storage from "redux-persist/lib/storage";
+import { persistStore, persistReducer } from 'redux-persist';
 
-export const store = createStore(rootReduser, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const config = {
+    key: "localhost",
+    storage,
+};
+
+const composeEnhansers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const persistedReduser = persistReducer(
+    config,
+    combineReducers({
+        profile: profileReduser,
+        chats: chatsReduser,
+        messages: messageReduser,
+    })
+);
+
+export const store = createStore(persistedReduser, composeEnhansers(applyMiddleware(thunk)));
+
+export const persistor = persistStore(store);

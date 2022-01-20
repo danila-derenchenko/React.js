@@ -1,4 +1,4 @@
-import { PROFILE_CHECKBOX } from "../action";
+import { PROFILE_CHECKBOX } from "../chats/action";
 
 const initialState = {
     checkbox: false,

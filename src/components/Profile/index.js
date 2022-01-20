@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { profile_checkbox } from "../../store/action";
+import { profile_checkbox } from "../../store/chats/action";
 
 export const Profile = () => {
     const name = useSelector(state => state.profile.name);
